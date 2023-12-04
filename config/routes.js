@@ -9,6 +9,6 @@
  */
 
 module.exports.routes = {
-
-
+  'POST /api/posts/job/start': { action: 'post/start-job' },
+  'POST /api/posts/job/stop': { action: 'post/stop-job' },
 };

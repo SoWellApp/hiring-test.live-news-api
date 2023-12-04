@@ -8,23 +8,21 @@
  * For more information on seeding your app with fake data, check out:
  * https://sailsjs.com/config/bootstrap
  */
-
+const lodash = require('lodash');
+const { faker } = require('@faker-js/faker');
 module.exports.bootstrap = async function() {
+  if (await User.count() > 0) {
+    return;
+  }
 
-  // By convention, this is a good place to set up fake data during development.
-  //
-  // For example:
-  // ```
-  // // Set up fake development data (or if we already have some, avast)
-  // if (await User.count() > 0) {
-  //   return;
-  // }
-  //
-  // await User.createEach([
-  //   { emailAddress: 'ry@example.com', fullName: 'Ryan Dahl', },
-  //   { emailAddress: 'rachael@example.com', fullName: 'Rachael Shaw', },
-  //   // etc.
-  // ]);
-  // ```
-
+  const users = lodash.range(10).map(() => {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
+    return {
+      pseudo: faker.internet.userName({ firstName, lastName }),
+      avatar: faker.internet.avatar(),
+      email: faker.internet.email({ firstName, lastName })
+    };
+  });
+  await User.createEach(users);
 };
